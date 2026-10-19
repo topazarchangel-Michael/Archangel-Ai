@@ -1,0 +1,45 @@
+# Repo: https://github.com/topazarchangel-Michael/Archangel-Ai (branch main). This file is at the repo root, so no rootDir is needed.
+# Render Blueprint: free web service. Data lives in Turso (free) because Render free disks are wiped on every sleep/redeploy.
+# Secrets marked sync:false are entered in the Render dashboard, never committed.
+services:
+  - type: web
+    name: archangel-backend
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm ci --include=dev && npx tsc
+    startCommand: node dist/index.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: TURSO_DATABASE_URL
+        sync: false
+      - key: TURSO_AUTH_TOKEN
+        sync: false
+      - key: IMAGE_STORE
+        value: db
+      - key: CHAT_PROVIDERS
+        value: pollinations   # add groq later: openai_compat,pollinations
+      - key: OPENAI_COMPAT_BASE_URL
+        sync: false
+      - key: OPENAI_COMPAT_API_KEY
+        sync: false
+      - key: OPENAI_COMPAT_MODEL
+        sync: false
+      - key: IMAGE_PROVIDER
+        value: pollinations
+      - key: POLLINATIONS_TEXT_MODEL
+        value: openai
+      - key: POLLINATIONS_IMAGE_MODEL
+        value: flux
+      - key: BILLING_MODE
+        value: test
+      - key: ADMIN_PRO_EMAILS
+        sync: false
+      - key: REVENUECAT_WEBHOOK_AUTH
+        generateValue: true
+      - key: INVITE_CODES
+        value: ARCHANGEL-TEST
